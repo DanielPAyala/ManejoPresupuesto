@@ -34,5 +34,14 @@ namespace ManejoPresupuesto.Implementations
             );
             return existe == 1;
         }
+
+        public async Task<IEnumerable<TipoCuenta>> Obtener(int usuarioId)
+        {
+            using var con = new SqlConnection(_connectionString);
+            return await con.QueryAsync<TipoCuenta>(
+                @"SELECT Id, Nombre, Orden FROM TiposCuentas WHERE UsuarioId = @UsuarioId",
+                new { usuarioId }
+            );
+        }
     }
 }
