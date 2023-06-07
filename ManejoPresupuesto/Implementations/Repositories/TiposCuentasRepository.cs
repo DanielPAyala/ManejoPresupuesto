@@ -59,5 +59,11 @@ namespace ManejoPresupuesto.Implementations.Repositories
                 new { id, usuarioId }
             );
         }
+
+        public async Task Borrar(int id)
+        {
+            using var con = new SqlConnection(_connectionString);
+            await con.ExecuteAsync(@"DELETE TiposCuentas WHERE Id = @Id", new { id });
+        }
     }
 }
