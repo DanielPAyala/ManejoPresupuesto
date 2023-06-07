@@ -1,11 +1,14 @@
-using ManejoPresupuesto.Implementations;
-using ManejoPresupuesto.Interfaces;
+using ManejoPresupuesto.Implementations.Repositories;
+using ManejoPresupuesto.Implementations.Services;
+using ManejoPresupuesto.Interfaces.IRepositories;
+using ManejoPresupuesto.Interfaces.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<ITiposCuentasRepository, TiposCuentasRepository>();
+builder.Services.AddTransient<IUsuariosService, UsuariosService>();
 
 var app = builder.Build();
 

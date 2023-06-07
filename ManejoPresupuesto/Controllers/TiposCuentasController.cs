@@ -1,4 +1,5 @@
-﻿using ManejoPresupuesto.Interfaces;
+﻿using ManejoPresupuesto.Interfaces.IRepositories;
+using ManejoPresupuesto.Interfaces.IServices;
 using ManejoPresupuesto.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,14 +8,17 @@ namespace ManejoPresupuesto.Controllers
     public class TiposCuentasController : Controller
     {
         private readonly ITiposCuentasRepository _tiposCuentasRepository;
-        public TiposCuentasController(ITiposCuentasRepository tiposCuentasRepository)
+        private readonly IUsuariosService _usuariosService;
+
+        public TiposCuentasController(ITiposCuentasRepository tiposCuentasRepository, IUsuariosService usuariosService)
         {
             _tiposCuentasRepository = tiposCuentasRepository;
+            _usuariosService = usuariosService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var usuarioId = 1;
+            var usuarioId = _usuariosService.ObtenerUsuarioId();
             var tiposCuentas = await _tiposCuentasRepository.Obtener(usuarioId);
             return View(tiposCuentas);
         }
@@ -32,7 +36,7 @@ namespace ManejoPresupuesto.Controllers
                 return View(tipoCuenta);
             }
 
-            tipoCuenta.UsuarioId = 1;
+            tipoCuenta.UsuarioId = _usuariosService.ObtenerUsuarioId();
 
             var yaExisteTipoCuenta = await _tiposCuentasRepository.Existe(tipoCuenta.Nombre, tipoCuenta.UsuarioId);
 
@@ -49,7 +53,7 @@ namespace ManejoPresupuesto.Controllers
         [HttpGet]
         public async Task<IActionResult> VerificarExisteTipoCuenta(string nombre)
         {
-            var usuarioId = 1;
+            var usuarioId = _usuariosService.ObtenerUsuarioId();
             var yaExisteTipoCuenta = await _tiposCuentasRepository.Existe(nombre, usuarioId);
 
             if (yaExisteTipoCuenta)

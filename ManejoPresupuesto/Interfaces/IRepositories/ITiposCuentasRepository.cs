@@ -1,6 +1,6 @@
 ﻿using ManejoPresupuesto.Models;
 
-namespace ManejoPresupuesto.Interfaces
+namespace ManejoPresupuesto.Interfaces.IRepositories
 {
     public interface ITiposCuentasRepository
     {

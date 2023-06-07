@@ -1,9 +1,9 @@
 ﻿using Dapper;
-using ManejoPresupuesto.Interfaces;
+using ManejoPresupuesto.Interfaces.IRepositories;
 using ManejoPresupuesto.Models;
 using Microsoft.Data.SqlClient;
 
-namespace ManejoPresupuesto.Implementations
+namespace ManejoPresupuesto.Implementations.Repositories
 {
     public class TiposCuentasRepository : ITiposCuentasRepository
     {
