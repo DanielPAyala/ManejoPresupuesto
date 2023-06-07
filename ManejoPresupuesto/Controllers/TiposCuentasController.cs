@@ -51,6 +51,35 @@ namespace ManejoPresupuesto.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Editar(int id)
+        {
+            var usuarioId = _usuariosService.ObtenerUsuarioId();
+            var tipoCuenta = await _tiposCuentasRepository.ObtenerPorId(id, usuarioId);
+
+            if (tipoCuenta is null)
+            {
+                return RedirectToAction("NoEncontrado", "Home");
+            }
+
+            return View(tipoCuenta);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Editar(TipoCuenta tipoCuenta)
+        {
+            var usuarioId = _usuariosService.ObtenerUsuarioId();
+            var yaExisteTipoCuenta = await _tiposCuentasRepository.ObtenerPorId(tipoCuenta.Id, usuarioId);
+
+            if (yaExisteTipoCuenta is null)
+            {
+                return RedirectToAction("NoEncontrado", "Home");
+            }
+
+            await _tiposCuentasRepository.Actualizar(tipoCuenta);
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
         public async Task<IActionResult> VerificarExisteTipoCuenta(string nombre)
         {
             var usuarioId = _usuariosService.ObtenerUsuarioId();

@@ -43,5 +43,21 @@ namespace ManejoPresupuesto.Implementations.Repositories
                 new { usuarioId }
             );
         }
+
+        public async Task Actualizar(TipoCuenta tipoCuenta)
+        {
+            using var con = new SqlConnection(_connectionString);
+            await con.ExecuteAsync(@"UPDATE TiposCuentas 
+                            SET Nombre = @Nombre WHERE Id = @Id", tipoCuenta);
+        }
+
+        public async Task<TipoCuenta> ObtenerPorId(int id, int usuarioId)
+        {
+            using var con = new SqlConnection(_connectionString);
+            return await con.QueryFirstOrDefaultAsync<TipoCuenta>(
+                @"SELECT Id, Nombre, Orden FROM TiposCuentas WHERE Id = @Id AND UsuarioId = @UsuarioId",
+                new { id, usuarioId }
+            );
+        }
     }
 }
