@@ -39,7 +39,7 @@ namespace ManejoPresupuesto.Implementations.Repositories
         {
             using var con = new SqlConnection(_connectionString);
             return await con.QueryAsync<TipoCuenta>(
-                @"SELECT Id, Nombre, Orden FROM TiposCuentas WHERE UsuarioId = @UsuarioId",
+                @"SELECT Id, Nombre, Orden FROM TiposCuentas WHERE UsuarioId = @UsuarioId ORDER BY Orden",
                 new { usuarioId }
             );
         }
@@ -64,6 +64,13 @@ namespace ManejoPresupuesto.Implementations.Repositories
         {
             using var con = new SqlConnection(_connectionString);
             await con.ExecuteAsync(@"DELETE TiposCuentas WHERE Id = @Id", new { id });
+        }
+
+        public async Task Ordenar(IEnumerable<TipoCuenta> tiposCuentasOrdenados)
+        {
+            var query = "UPDATE TiposCuentas SET Orden = @Orden WHERE Id = @Id";
+            using var con = new SqlConnection(_connectionString);
+            await con.ExecuteAsync(query, tiposCuentasOrdenados);
         }
     }
 }
