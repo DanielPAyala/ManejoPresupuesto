@@ -10,23 +10,54 @@ namespace ManejoPresupuesto.Controllers
     {
         private readonly ITiposCuentasRepository _tiposCuentasRepository;
         private readonly IUsuariosService _usuariosService;
+        private readonly ICuentasRepository _cuentasRepository;
 
-        public CuentasController(ITiposCuentasRepository tiposCuentasRepository, IUsuariosService usuariosService)
+        public CuentasController(
+            ITiposCuentasRepository tiposCuentasRepository, 
+            IUsuariosService usuariosService, 
+            ICuentasRepository cuentasRepository)
         {
             _tiposCuentasRepository = tiposCuentasRepository;
             _usuariosService = usuariosService;
+            _cuentasRepository = cuentasRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> Crear()
         {
             var usuarioId = _usuariosService.ObtenerUsuarioId();
-            var tiposCuentas = await _tiposCuentasRepository.Obtener(usuarioId);
-
+            
             var modelo = new CuentaCreacionViewModel();
-            modelo.TiposCuentas = tiposCuentas.Select(x => new SelectListItem(x.Nombre, x.Id.ToString()));
+            modelo.TiposCuentas = await ObtenerTiposCuentas(usuarioId);
 
             return View(modelo);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Crear(CuentaCreacionViewModel cuenta)
+        {
+            var usuarioId = _usuariosService.ObtenerUsuarioId();
+            var tipoCuenta = await _tiposCuentasRepository.ObtenerPorId(cuenta.TipoCuentaId, usuarioId);
+
+            if (tipoCuenta is null)
+            {
+                return RedirectToAction("NoEncontrado", "Home");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                cuenta.TiposCuentas = await ObtenerTiposCuentas(usuarioId);
+                return View(cuenta);
+            }
+
+            await _cuentasRepository.Crear(cuenta);
+            return RedirectToAction("Index");
+        }
+
+        private async Task<IEnumerable<SelectListItem>> ObtenerTiposCuentas(int usuarioId)
+        {
+            var tiposCuentas = await _tiposCuentasRepository.Obtener(usuarioId);
+            return tiposCuentas.Select(x => new SelectListItem(x.Nombre, x.Id.ToString()));
         }
     }
 }
