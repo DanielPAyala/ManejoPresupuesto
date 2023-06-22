@@ -33,5 +33,23 @@ namespace ManejoPresupuesto.Implementations.Repositories
                 WHERE tc.UsuarioId = @UsuarioId
                 ORDER BY Orden", new { usuarioId });
         }
+
+        public async Task<Cuenta> ObtenerPorId(int id, int usuarioId)
+        {
+            using var con = new SqlConnection(_connectionString);
+            return await con.QueryFirstOrDefaultAsync<Cuenta>(@"SELECT Cuentas.Id, Cuentas.Nombre, Balance, Descripcion, Cuentas.TipoCuentaId
+                FROM Cuentas 
+                INNER JOIN TiposCuentas tc ON tc.Id = Cuentas.TipoCuentaId
+                WHERE tc.UsuarioId = @UsuarioId AND Cuentas.Id = @Id",
+                new { usuarioId, id });
+        }
+
+        public async Task Actualizar(CuentaCreacionViewModel cuenta)
+        {
+            using var con = new SqlConnection(_connectionString);
+            await con.ExecuteAsync(@"UPDATE Cuentas
+                SET Nombre = @Nombre, Balance = @Balance, Descripcion = @Descripcion, TipoCuentaId = @TipoCuentaId
+                WHERE Id = @Id", cuenta);
+        }
     }
 }
