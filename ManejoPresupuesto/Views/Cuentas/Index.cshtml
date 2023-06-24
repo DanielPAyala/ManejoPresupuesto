@@ -72,7 +72,7 @@
                                 <span>
                                     <strong>@cuenta.Nombre</strong>
                                     <a class="btn btn-primary" asp-action="Editar" asp-route-id="@cuenta.Id"><i class="bi-pencil-fill"></i></a>
-                                    <a class="btn btn-danger"><i class="bi-trash-fill"></i></a>
+                                    <a class="btn btn-danger" asp-action="Borrar" asp-route-id="@cuenta.Id"><i class="bi-trash-fill"></i></a>
                                 </span>
                                 <span class="@claseCuenta">@FormatearBalance(cuenta.Balance)</span>
                             </li>
