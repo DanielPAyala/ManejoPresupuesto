@@ -33,5 +33,21 @@ namespace ManejoPresupuesto.Implementations.Repositories
 
             categoria.Id = id;
         }
+
+        public async Task<Categoria> ObtenerPorId(int id, int usuarioId)
+        {
+            using var con = new SqlConnection(_connectionString);
+            return await con.QueryFirstOrDefaultAsync<Categoria>(
+                @"SELECT * FROM Categorias WHERE Id = @Id AND UsuarioId = @UsuarioId",
+                new { id, usuarioId });
+        }
+
+        public async Task Actualizar(Categoria categoria)
+        {
+            using var con = new SqlConnection(_connectionString);
+            await con.ExecuteAsync(
+                @"UPDATE Categorias SET Nombre = @Nombre, TipoOperacionId = @TipoOperacionId
+                WHERE Id = @Id", categoria);
+        }
     }
 }
