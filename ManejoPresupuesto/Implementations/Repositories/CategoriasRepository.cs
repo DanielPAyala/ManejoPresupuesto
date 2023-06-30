@@ -49,5 +49,11 @@ namespace ManejoPresupuesto.Implementations.Repositories
                 @"UPDATE Categorias SET Nombre = @Nombre, TipoOperacionId = @TipoOperacionId
                 WHERE Id = @Id", categoria);
         }
+
+        public async Task Borrar(int id)
+        {
+            using var con = new SqlConnection(_connectionString);
+            await con.ExecuteAsync(@"DELETE Categorias WHERE Id = @Id", new { id });
+        }
     }
 }
