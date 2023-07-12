@@ -11,6 +11,7 @@ builder.Services.AddTransient<ITiposCuentasRepository, TiposCuentasRepository>()
 builder.Services.AddTransient<IUsuariosService, UsuariosService>();
 builder.Services.AddTransient<ICuentasRepository, CuentasRepository>();
 builder.Services.AddTransient<ICategoriasRepository, CategoriasRepository>();
+builder.Services.AddTransient<ITransaccionesRepository, TransaccionesRepository>();
 builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();

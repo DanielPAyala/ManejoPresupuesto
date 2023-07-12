@@ -23,6 +23,15 @@ namespace ManejoPresupuesto.Implementations.Repositories
                 );
         }
 
+        public async Task<IEnumerable<Categoria>> Obtener(int usuarioId, TipoOperacion tipoOperacionId)
+        {
+            using var con = new SqlConnection(_connectionString);
+            return await con.QueryAsync<Categoria>(
+                @"SELECT * FROM Categorias WHERE UsuarioId = @usuarioId AND TipoOperacionId = @tipoOperacionId",
+                new { usuarioId, tipoOperacionId }
+                );
+        }
+
         public async Task Crear(Categoria categoria)
         {
             using var con = new SqlConnection(_connectionString);
