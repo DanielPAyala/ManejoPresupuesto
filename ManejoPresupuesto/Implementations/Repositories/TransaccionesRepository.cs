@@ -56,5 +56,11 @@ namespace ManejoPresupuesto.Implementations.Repositories
                 WHERE Transacciones.Id = @Id AND Transacciones.UsuarioId = @UsuarioId",
                 new { id, usuarioId });
         }
+
+        public async Task Borrar(int id)
+        {
+            using var con = new SqlConnection(_connectionString);
+            await con.ExecuteAsync("Transaccion_Borrar", new { id }, commandType: CommandType.StoredProcedure);
+        }
     }
 }
